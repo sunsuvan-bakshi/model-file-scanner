@@ -31,7 +31,7 @@ jobs:
     # Run automated unit tests (pytest)
     - name: Run Unit Tests
       run: |
-        pytest
+        PYTHONPATH=. pytest
     
     # Verify Docker container builds correctly
     - name: Build Docker Image
