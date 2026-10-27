@@ -1,0 +1,39 @@
+name: MLSecOps Scanner CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Pull latest code from the repository
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    # Set up Python environment on the cloud runner
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    # Install project dependencies
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    # Run automated unit tests (pytest)
+    - name: Run Unit Tests
+      run: |
+        pytest
+    
+    # Verify Docker container builds correctly
+    - name: Build Docker Image
+      run: |
+        docker build -t model-file-scanner:latest .
